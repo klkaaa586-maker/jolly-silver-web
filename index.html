@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام Jolly Silver للإدارة</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #34495e;
+            --secondary-color: #2980b9;
+            --light-color: #2c3e50;
+            --dark-color: #ecf0f1;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .logout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .dark-mode .stat-card {
+            background: var(--primary-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .dark-mode .stat-card .value {
+            color: var(--dark-color);
+        }
+
+        .stat-card .profit { color: var(--success-color); }
+        .stat-card .loss { color: var(--danger-color); }
+        .stat-card .warning { color: var(--warning-color); }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .card {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .card ul {
+            list-style: none;
+        }
+
+        .card ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dark-mode .card ul li {
+            border-bottom: 1px solid #4a6278;
+        }
+
+        .card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .card ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dark-mode .card ul li a {
+            color: var(--dark-color);
+        }
+
+        .card ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .dark-mode .section h2 {
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-control {
+            background-color: #4a6278;
+            border-color: #4a6278;
+            color: var(--dark-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        table th, table td {
+            padding: 0.75rem;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .dark-mode table th, .dark-mode table td {
+            border-bottom: 1px solid #4a6278;
+        }
+
+        table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dark-mode table th {
+            background-color: #4a6278;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .dark-mode .alert-warning {
+            background-color: #4a3f00;
+            color: #ffd351;
+            border: 1px solid #6b5900;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .dark-mode .alert-success {
+            background-color: #1a3c23;
+            color: #6ae28d;
+            border: 1px solid #2a5c38;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .dark-mode .alert-danger {
+            background-color: #4a1c24;
+            color: #ff8a9a;
+            border: 1px solid #6b2a34;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--primary-color);
+        }
+
+        .login-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .dark-mode .login-form {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .dark-mode .login-form h2 {
+            color: var(--dark-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        .dark-mode footer {
+            background-color: #2c3e50;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-buttons .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0.25rem;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة الدخول -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-form">
+            <h2>تسجيل الدخول - نظام Jolly Silver</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم:</label>
+                    <input type="text" id="username" class="form-control" required value="admin">
+                </div>
+                <div class="form-group">
+                    <label for="password">كلمة المرور:</label>
+                    <input type="password" id="password" class="form-control" required value="admin123">
+                </div>
+                <div class="form-group">
+                    <label for="userType">نوع المستخدم:</label>
+                    <select id="userType" class="form-control" required>
+                        <option value="admin">مسؤول</option>
+                        <option value="user">مستخدم</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">تسجيل الدخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- واجهة المسؤول -->
+    <div id="adminInterface" class="hidden">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">نظام Jolly Silver للإدارة</div>
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="nav-link active" data-section="dashboard">لوحة التحكم</a></li>
+                            <li><a href="#" class="nav-link" data-section="inventory">إدارة المخزون</a></li>
+                            <li><a href="#" class="nav-link" data-section="sales">المبيعات</a></li>
+                            <li><a href="#" class="nav-link" data-section="expenses">المصروفات</a></li>
+                            <li><a href="#" class="nav-link" data-section="reports">التقارير</a></li>
+                            <li><a href="#" class="nav-link" data-section="users">المستخدمين</a></li>
+                        </ul>
+                    </nav>
+                    <div class="user-info">
+                        <button id="themeToggle" class="theme-toggle">🌙</button>
+                        <span id="userWelcome">مرحباً، المسؤول</span>
+                        <button id="logoutBtn" class="logout-btn">تسجيل الخروج</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- لوحة التحكم -->
+            <section id="dashboard" class="section">
+                <h2>لوحة تحكم المسؤول</h2>
+                <div id="dashboardStats" class="dashboard">
+                    <!-- سيتم ملء الإحصائيات هنا -->
+                </div>
+                
+                <div class="dashboard">
+                    <div class="card">
+                        <h3>تنبيهات المخزون المنخفض</h3>
+                        <div id="lowStockAlerts">
+                            <!-- سيتم ملء التنبيهات هنا -->
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>أحدث المبيعات</h3>
+                        <div id="recentSales">
+                            <!-- سيتم ملء المبيعات هنا -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- إدارة المخزون -->
+            <section id="inventory" class="section hidden">
+                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                    <h2>إدارة المخزون</h2>
+                    <button class="btn btn-success" onclick="showModal('addProductModal')">إضافة منتج جديد</button>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="searchProducts" class="form-control" placeholder="بحث في المنتجات..." onkeyup="filterProducts()">
+                </div>
+
+                <div id="productsList">
+                    <!-- سيتم ملء المنتجات هنا -->
+                </div>
+            </section>
+
+            <!-- المبيعات -->
+            <section id="sales" class="section hidden">
+                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                    <h2>إدارة المبيعات</h2>
+                    <button class="btn btn-success" onclick="showModal('addSaleModal')">تسجيل بيع جديد</button>
+                </div>
+
+                <div id="salesList">
+                    <!-- سيتم ملء المبيعات هنا -->
+                </div>
+            </section>
+
+            <!-- المصروفات -->
+            <section id="expenses" class="section hidden">
+                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                    <h2>إدارة المصروفات</h2>
+                    <button class="btn btn-success" onclick="showModal('addExpenseModal')">إضافة مصروف</button>
+                </div>
+
+                <div id="expensesList">
+                    <!-- سيتم ملء المصروفات هنا -->
+                </div>
+            </section>
+
+            <!-- التقارير -->
+            <section id="reports" class="section hidden">
+                <h2>التقارير والإحصائيات</h2>
+                <div class="dashboard">
+                    <div class="card">
+                        <h3>تقارير المبيعات</h3>
+                        <button class="btn" onclick="generateSalesReport()">تقرير المبيعات</button>
+                        <button class="btn" onclick="generateMonthlyReport()">تقرير شهري</button>
+                    </div>
+                    <div class="card">
+                        <h3>تقارير المخزون</h3>
+                        <button class="btn" onclick="generateInventoryReport()">تقرير المخزون</button>
+                        <button class="btn" onclick="generateLowStockReport()">تقرير المخزون المنخفض</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- إدارة المستخدمين -->
+            <section id="users" class="section hidden">
+                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                    <h2>إدارة المستخدمين</h2>
+                    <button class="btn btn-success" onclick="showModal('addUserModal')">إضافة مستخدم</button>
+                </div>
+
+                <div id="usersList">
+                    <!-- سيتم ملء المستخدمين هنا -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>نظام Jolly Silver للإدارة &copy; 2024</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- واجهة المستخدم -->
+    <div id="userInterface" class="hidden">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">نظام Jolly Silver للإدارة</div>
+                    <nav>
+                        <ul>
+                            <li><a href="#" class="user-nav-link active" data-section="userDashboard">لوحة التحكم</a></li>
+                            <li><a href="#" class="user-nav-link" data-section="userSales">المبيعات</a></li>
+                            <li><a href="#" class="user-nav-link" data-section="userInventory">المخزون</a></li>
+                        </ul>
+                    </nav>
+                    <div class="user-info">
+                        <button id="userThemeToggle" class="theme-toggle">🌙</button>
+                        <span id="userWelcomeText">مرحباً، المستخدم</span>
+                        <button id="userLogoutBtn" class="logout-btn">تسجيل الخروج</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- لوحة تحكم المستخدم -->
+            <section id="userDashboard" class="section">
+                <h2>لوحة تحكم المستخدم</h2>
+                <div class="card">
+                    <h3>الإجراءات السريعة</h3>
+                    <div class="dashboard">
+                        <div class="stat-card">
+                            <h3>تسجيل بيع</h3>
+                            <button class="btn btn-success" onclick="showModal('addSaleModal')">بدء عملية بيع</button>
+                        </div>
+                        <div class="stat-card">
+                            <h3>فحص المخزون</h3>
+                            <button class="btn" onclick="showUserSection('userInventory')">عرض المخزون</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- مبيعات المستخدم -->
+            <section id="userSales" class="section hidden">
+                <h2>تسجيل المبيعات</h2>
+                <div class="card">
+                    <form id="userSaleForm">
+                        <div class="form-group">
+                            <label for="userSaleProduct">المنتج:</label>
+                            <select id="userSaleProduct" class="form-control" required>
+                                <option value="">اختر المنتج</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="userSaleQuantity">الكمية:</label>
+                            <input type="number" id="userSaleQuantity" class="form-control" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="userSalePrice">سعر البيع:</label>
+                            <input type="number" id="userSalePrice" class="form-control" required step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="userCustomerName">اسم العميل (اختياري):</label>
+                            <input type="text" id="userCustomerName" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-success">تسجيل البيع</button>
+                    </form>
+                </div>
+
+                <h3 style="margin-top: 2rem;">عمليات البيع الخاصة بي</h3>
+                <div id="userSalesList">
+                    <!-- سيتم ملء مبيعات المستخدم هنا -->
+                </div>
+            </section>
+
+            <!-- مخزون المستخدم -->
+            <section id="userInventory" class="section hidden">
+                <h2>المخزون المتاح</h2>
+                <div class="form-group">
+                    <input type="text" id="userSearchProducts" class="form-control" placeholder="بحث في المنتجات..." onkeyup="filterUserProducts()">
+                </div>
+                <div id="userProductsList">
+                    <!-- سيتم ملء منتجات المستخدم هنا -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>نظام Jolly Silver للإدارة &copy; 2024</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- النماذج المنبثقة -->
+    <!-- نموذج إضافة منتج -->
+    <div id="addProductModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>إضافة منتج جديد</h3>
+            <form id="addProductForm">
+                <div class="form-group">
+                    <label for="newProductName">اسم المنتج:</label>
+                    <input type="text" id="newProductName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="newProductCategory">الفئة:</label>
+                    <select id="newProductCategory" class="form-control" required>
+                        <option value="">اختر الفئة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newProductWeight">الوزن (جرام):</label>
+                    <input type="number" id="newProductWeight" class="form-control" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="newProductPieces">الكمية (قطعة):</label>
+                    <input type="number" id="newProductPieces" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="newProductCost">سعر التكلفة:</label>
+                    <input type="number" id="newProductCost" class="form-control" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="newProductPrice">سعر البيع:</label>
+                    <input type="number" id="newProductPrice" class="form-control" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="newProductStock">الكمية الأولية:</label>
+                    <input type="number" id="newProductStock" class="form-control" required min="0">
+                </div>
+                <div class="form-group">
+                    <label for="newProductMinStock">حد التنبيه (الحد الأدنى):</label>
+                    <input type="number" id="newProductMinStock" class="form-control" value="5" min="1">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">إضافة المنتج</button>
+                    <button type="button" class="btn btn-danger" onclick="hideModal('addProductModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة بيع -->
+    <div id="addSaleModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>تسجيل عملية بيع</h3>
+            <form id="addSaleForm">
+                <div class="form-group">
+                    <label for="saleProduct">المنتج:</label>
+                    <select id="saleProduct" class="form-control" required>
+                        <option value="">اختر المنتج</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="saleQuantity">الكمية:</label>
+                    <input type="number" id="saleQuantity" class="form-control" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="salePrice">سعر البيع:</label>
+                    <input type="number" id="salePrice" class="form-control" required step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="saleCustomerName">اسم العميل (اختياري):</label>
+                    <input type="text" id="saleCustomerName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">تسجيل البيع</button>
+                    <button type="button" class="btn btn-danger" onclick="hideModal('addSaleModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة مصروف -->
+    <div id="addExpenseModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>إضافة مصروف جديد</h3>
+            <form id="addExpenseForm">
+                <div class="form-group">
+                    <label for="expenseCategory">فئة المصروف:</label>
+                    <select id="expenseCategory" class="form-control" required>
+                        <option value="">اختر الفئة</option>
+                        <option value="rent">إيجار</option>
+                        <option value="utilities">مرافق</option>
+                        <option value="electricity">كهرباء</option>
+                        <option value="water">ماء</option>
+                        <option value="maintenance">صيانة</option>
+                        <option value="salaries">رواتب</option>
+                        <option value="marketing">تسويق</option>
+                        <option value="other">أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expenseAmount">المبلغ:</label>
+                    <input type="number" id="expenseAmount" class="form-control" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="expenseDate">التاريخ:</label>
+                    <input type="date" id="expenseDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="expenseDescription">الوصف:</label>
+                    <textarea id="expenseDescription" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">إضافة المصروف</button>
+                    <button type="button" class="btn btn-danger" onclick="hideModal('addExpenseModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة مستخدم -->
+    <div id="addUserModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>إضافة مستخدم جديد</h3>
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label for="newUsername">اسم المستخدم:</label>
+                    <input type="text" id="newUsername" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserPassword">كلمة المرور:</label>
+                    <input type="password" id="newUserPassword" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserType">نوع المستخدم:</label>
+                    <select id="newUserType" class="form-control" required>
+                        <option value="user">مستخدم</option>
+                        <option value="admin">مسؤول</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newUserPermissions">الصلاحيات:</label>
+                    <select id="newUserPermissions" class="form-control">
+                        <option value="basic">أساسي (المبيعات فقط)</option>
+                        <option value="all">كامل (جميع الصلاحيات)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">إضافة المستخدم</button>
+                    <button type="button" class="btn btn-danger" onclick="hideModal('addUserModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- أنماط النماذج المنبثقة -->
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .dark-mode .modal-content {
+            background: var(--primary-color);
+            color: var(--dark-color);
+        }
+    </style>
+
+    <script>
+        // 🔗 إعدادات API - ضع رابط النشر هنا
+        const API_URL = 'URL
+https://script.google.com/macros/s/AKfycbxMaZP558JWpD6xzyzcTMF6qGEblgDlefE9_7uQn8p1QnNi-k-zbwx63cJoFOn_vsTa/exec';
+
+        // حالة التطبيق
+        let currentUser = null;
+        let isDarkMode = false;
+        let products = [];
+        let categories = [];
+        let sales = [];
+        let expenses = [];
+        let users = [];
+
+        // تهيئة التطبيق
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        async function initializeApp() {
+            // تعيين تاريخ اليوم
+            setTodayDate();
+            
+            // إضافة مستمعي الأحداث
+            setupEventListeners();
+            
+            // تحميل البيانات الأولية إذا كان المستخدم مسجل الدخول
+            if (localStorage.getItem('currentUser')) {
+                currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                showMainInterface();
+                await loadInitialData();
+            }
+        }
+
+        function setupEventListeners() {
+            // أحداث الدخول
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('userLogoutBtn').addEventListener('click', handleLogout);
+            
+            // أحداث الثيم
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('userThemeToggle').addEventListener('click', toggleTheme);
+            
+            // أحداث التنقل
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection(e.target.getAttribute('data-section'));
+                });
+            });
+            
+            document.querySelectorAll('.user-nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showUserSection(e.target.getAttribute('data-section'));
+                });
+            });
+            
+            // أحداث النماذج
+            document.getElementById('addProductForm').addEventListener('submit', addProduct);
+            document.getElementById('addSaleForm').addEventListener('submit', addSale);
+            document.getElementById('addExpenseForm').addEventListener('submit', addExpense);
+            document.getElementById('addUserForm').addEventListener('submit', addUser);
+            document.getElementById('userSaleForm').addEventListener('submit', addUserSale);
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('expenseDate').value = today;
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
+            
+            try {
+                const result = await callAPI('login', { username, password });
+                
+                if (result.success) {
+                    currentUser = result;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showMainInterface();
+                    await loadInitialData();
+                    showMessage('تم تسجيل الدخول بنجاح!', 'success');
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في الاتصال بالخادم', 'error');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('adminInterface').classList.add('hidden');
+            document.getElementById('userInterface').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        function showMainInterface() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            
+            if (currentUser.userType === 'admin') {
+                document.getElementById('adminInterface').classList.remove('hidden');
+                document.getElementById('userWelcome').textContent = `مرحباً، ${currentUser.username}`;
+                showSection('dashboard');
+            } else {
+                document.getElementById('userInterface').classList.remove('hidden');
+                document.getElementById('userWelcomeText').textContent = `مرحباً، ${currentUser.username}`;
+                showUserSection('userDashboard');
+            }
+        }
+
+        async function loadInitialData() {
+            try {
+                if (currentUser.userType === 'admin') {
+                    await loadAdminData();
+                } else {
+                    await loadUserData();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        async function loadAdminData() {
+            const [productsData, categoriesData, salesData, expensesData, usersData, statsData] = await Promise.all([
+                callAPI('getProducts'),
+                callAPI('getCategories'),
+                callAPI('getSales'),
+                callAPI('getExpenses'),
+                callAPI('getUsers'),
+                callAPI('getDashboardStats')
+            ]);
+            
+            products = productsData;
+            categories = categoriesData;
+            sales = salesData;
+            expenses = expensesData;
+            users = usersData;
+            
+            updateAdminUI();
+        }
+
+        async function loadUserData() {
+            const [productsData, salesData] = await Promise.all([
+                callAPI('getProducts'),
+                callAPI('getSales')
+            ]);
+            
+            products = productsData;
+            sales = salesData.filter(sale => sale.soldBy === currentUser.username);
+            
+            updateUserUI();
+        }
+
+        function updateAdminUI() {
+            updateDashboardStats();
+            updateProductsList();
+            updateSalesList();
+            updateExpensesList();
+            updateUsersList();
+            updateCategorySelects();
+        }
+
+        function updateUserUI() {
+            updateUserProductsList();
+            updateUserSalesList();
+            updateUserCategorySelects();
+        }
+
+        // ... (سيستمر الكود في الرد التالي due to length limits)
+
+        function updateDashboardStats() {
+            const stats = {
+                totalProducts: products.length,
+                totalSales: sales.length,
+                totalRevenue: sales.reduce((sum, sale) => sum + (sale.price * sale.quantity), 0),
+                totalProfit: sales.reduce((sum, sale) => sum + (sale.profit || 0), 0),
+                totalExpenses: expenses.reduce((sum, expense) => sum + expense.amount, 0),
+                lowStockCount: products.filter(p => p.currentStock <= p.minStock).length
+            };
+            
+            const netProfit = stats.totalProfit - stats.totalExpenses;
+            
+            document.getElementById('dashboardStats').innerHTML = `
+                <div class="stat-card">
+                    <h3>إجمالي المنتجات</h3>
+                    <div class="value">${stats.totalProducts}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>إجمالي المبيعات</h3>
+                    <div class="value">${stats.totalSales}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>إجمالي الإيرادات</h3>
+                    <div class="value">${stats.totalRevenue.toFixed(2)} ر.س</div>
+                </div>
+                <div class="stat-card">
+                    <h3>صافي الأرباح</h3>
+                    <div class="value ${netProfit >= 0 ? 'profit' : 'loss'}">${netProfit.toFixed(2)} ر.س</div>
+                </div>
+                <div class="stat-card">
+                    <h3>المصروفات</h3>
+                    <div class="value">${stats.totalExpenses.toFixed(2)} ر.س</div>
+                </div>
+                <div class="stat-card">
+                    <h3>تنبيهات المخزون</h3>
+                    <div class="value warning">${stats.lowStockCount}</div>
+                </div>
+            `;
+            
+            // تحديث تنبيهات المخزون المنخفض
+            updateLowStockAlerts();
+            
+            // تحديث أحدث المبيعات
+            updateRecentSales();
+        }
+
+        function updateLowStockAlerts() {
+            const lowStockProducts = products.filter(p => p.currentStock <= p.minStock);
+            
+            if (lowStockProducts.length === 0) {
+                document.getElementById('lowStockAlerts').innerHTML = '<p>لا توجد تنبيهات للمخزون المنخفض</p>';
+                return;
+            }
+            
+            const alertsHTML = lowStockProducts.map(product => `
+                <div class="alert alert-warning">
+                    <strong>${product.name}</strong><br>
+                    المخزون الحالي: ${product.currentStock} - الحد الأدنى: ${product.minStock}
+                </div>
+            `).join('');
+            
+            document.getElementById('lowStockAlerts').innerHTML = alertsHTML;
+        }
+
+        function updateRecentSales() {
+            const recentSales = sales.slice(-5).reverse();
+            
+            if (recentSales.length === 0) {
+                document.getElementById('recentSales').innerHTML = '<p>لا توجد مبيعات حديثة</p>';
+                return;
+            }
+            
+            const salesHTML = recentSales.map(sale => `
+                <div style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>${sale.productName}</strong><br>
+                    الكمية: ${sale.quantity} - السعر: ${sale.price} ر.س<br>
+                    <small>${new Date(sale.date).toLocaleDateString('ar-SA')}</small>
+                </div>
+            `).join('');
+            
+            document.getElementById('recentSales').innerHTML = salesHTML;
+        }
+
+        function updateProductsList() {
+            let productsHTML = '';
+            
+            if (products.length === 0) {
+                productsHTML = '<p>لا توجد منتجات</p>';
+            } else {
+                productsHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>المخزون</th>
+                                <th>سعر التكلفة</th>
+                                <th>سعر البيع</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${products.map(product => `
+                                <tr>
+                                    <td>${product.name}</td>
+                                    <td>${product.category}</td>
+                                    <td>
+                                        <span class="${product.currentStock <= product.minStock ? 'warning' : ''}">
+                                            ${product.currentStock}
+                                        </span>
+                                    </td>
+                                    <td>${product.costPrice} ر.س</td>
+                                    <td>${product.marketValue} ر.س</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-warning" onclick="editProduct(${product.id})">تعديل</button>
+                                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">حذف</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('productsList').innerHTML = productsHTML;
+        }
+
+        function updateSalesList() {
+            let salesHTML = '';
+            
+            if (sales.length === 0) {
+                salesHTML = '<p>لا توجد مبيعات</p>';
+            } else {
+                salesHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                                <th>الربح</th>
+                                <th>البائع</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sales.map(sale => `
+                                <tr>
+                                    <td>${sale.productName}</td>
+                                    <td>${sale.quantity}</td>
+                                    <td>${sale.price} ر.س</td>
+                                    <td class="profit">${sale.profit} ر.س</td>
+                                    <td>${sale.soldBy}</td>
+                                    <td>${new Date(sale.date).toLocaleDateString('ar-SA')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('salesList').innerHTML = salesHTML;
+        }
+
+        function updateExpensesList() {
+            let expensesHTML = '';
+            
+            if (expenses.length === 0) {
+                expensesHTML = '<p>لا توجد مصروفات</p>';
+            } else {
+                expensesHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الفئة</th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>الوصف</th>
+                                <th>المضيف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${expenses.map(expense => `
+                                <tr>
+                                    <td>${expense.category}</td>
+                                    <td>${expense.amount} ر.س</td>
+                                    <td>${new Date(expense.date).toLocaleDateString('ar-SA')}</td>
+                                    <td>${expense.description}</td>
+                                    <td>${expense.addedBy}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('expensesList').innerHTML = expensesHTML;
+        }
+
+        function updateUsersList() {
+            let usersHTML = '';
+            
+            if (users.length === 0) {
+                usersHTML = '<p>لا توجد مستخدمين</p>';
+            } else {
+                usersHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم المستخدم</th>
+                                <th>النوع</th>
+                                <th>الصلاحيات</th>
+                                <th>تاريخ الإنشاء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${users.map(user => `
+                                <tr>
+                                    <td>${user.username}</td>
+                                    <td>${user.type === 'admin' ? 'مسؤول' : 'مستخدم'}</td>
+                                    <td>${user.permissions === 'all' ? 'كاملة' : 'أساسية'}</td>
+                                    <td>${new Date(user.created).toLocaleDateString('ar-SA')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('usersList').innerHTML = usersHTML;
+        }
+
+        function updateUserProductsList() {
+            let productsHTML = '';
+            
+            if (products.length === 0) {
+                productsHTML = '<p>لا توجد منتجات</p>';
+            } else {
+                productsHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم المنتج</th>
+                                <th>الفئة</th>
+                                <th>المخزون</th>
+                                <th>سعر البيع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${products.map(product => `
+                                <tr>
+                                    <td>${product.name}</td>
+                                    <td>${product.category}</td>
+                                    <td>
+                                        <span class="${product.currentStock <= product.minStock ? 'warning' : ''}">
+                                            ${product.currentStock}
+                                        </span>
+                                    </td>
+                                    <td>${product.marketValue} ر.س</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('userProductsList').innerHTML = productsHTML;
+        }
+
+        function updateUserSalesList() {
+            const userSales = sales.filter(sale => sale.soldBy === currentUser.username);
+            let salesHTML = '';
+            
+            if (userSales.length === 0) {
+                salesHTML = '<p>لا توجد مبيعات</p>';
+            } else {
+                salesHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المنتج</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                                <th>الربح</th>
+                                <th>التاريخ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${userSales.map(sale => `
+                                <tr>
+                                    <td>${sale.productName}</td>
+                                    <td>${sale.quantity}</td>
+                                    <td>${sale.price} ر.س</td>
+                                    <td class="profit">${sale.profit} ر.س</td>
+                                    <td>${new Date(sale.date).toLocaleDateString('ar-SA')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            document.getElementById('userSalesList').innerHTML = salesHTML;
+        }
+
+        function updateCategorySelects() {
+            const categoryOptions = categories.map(cat => 
+                `<option value="${cat.name}">${cat.name}</option>`
+            ).join('');
+            
+            const categorySelects = [
+                'newProductCategory',
+                'saleProductCategory'
+            ];
+            
+            categorySelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                if (select) {
+                    select.innerHTML = '<option value="">اختر الفئة</option>' + categoryOptions;
+                }
+            });
+            
+            // تحديث قائمة المنتجات في نموذج البيع
+            updateSaleProductSelect();
+        }
+
+        function updateUserCategorySelects() {
+            updateSaleProductSelect();
+        }
+
+        function updateSaleProductSelect() {
+            const productSelect = document.getElementById('saleProduct');
+            const userProductSelect = document.getElementById('userSaleProduct');
+            
+            const productOptions = products.map(product => 
+                `<option value="${product.id}" data-cost="${product.costPrice}" data-stock="${product.currentStock}">
+                    ${product.name} - ${product.marketValue} ر.س (المخزون: ${product.currentStock})
+                </option>`
+            ).join('');
+            
+            const baseHTML = '<option value="">اختر المنتج</option>' + productOptions;
+            
+            if (productSelect) productSelect.innerHTML = baseHTML;
+            if (userProductSelect) userProductSelect.innerHTML = baseHTML;
+            
+            // إضافة مستمعي الأحداث لتحديث السعر التلقائي
+            if (productSelect) {
+                productSelect.addEventListener('change', updateSalePrice);
+            }
+            if (userProductSelect) {
+                userProductSelect.addEventListener('change', updateUserSalePrice);
+            }
+        }
+
+        function updateSalePrice() {
+            const productSelect = document.getElementById('saleProduct');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const marketValue = selectedOption.textContent.match(/(\d+(\.\d+)?) ر\.س/);
+            
+            if (marketValue) {
+                document.getElementById('salePrice').value = marketValue[1];
+            }
+        }
+
+        function updateUserSalePrice() {
+            const productSelect = document.getElementById('userSaleProduct');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const marketValue = selectedOption.textContent.match(/(\d+(\.\d+)?) ر\.س/);
+            
+            if (marketValue) {
+                document.getElementById('userSalePrice').value = marketValue[1];
+            }
+        }
+
+        async function addProduct(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('newProductName').value,
+                category: document.getElementById('newProductCategory').value,
+                weight: document.getElementById('newProductWeight').value,
+                pieces: document.getElementById('newProductPieces').value,
+                costPrice: document.getElementById('newProductCost').value,
+                marketValue: document.getElementById('newProductPrice').value,
+                initialStock: document.getElementById('newProductStock').value,
+                minStock: document.getElementById('newProductMinStock').value
+            };
+            
+            try {
+                const result = await callAPI('addProduct', formData);
+                
+                if (result.success) {
+                    showMessage('تم إضافة المنتج بنجاح', 'success');
+                    hideModal('addProductModal');
+                    document.getElementById('addProductForm').reset();
+                    await loadAdminData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في إضافة المنتج', 'error');
+            }
+        }
+
+        async function addSale(e) {
+            e.preventDefault();
+            
+            const productSelect = document.getElementById('saleProduct');
+            const selectedProduct = products.find(p => p.id == productSelect.value);
+            
+            if (!selectedProduct) {
+                showMessage('الرجاء اختيار منتج', 'error');
+                return;
+            }
+            
+            if (selectedProduct.currentStock < document.getElementById('saleQuantity').value) {
+                showMessage('الكمية المطلوبة غير متوفرة في المخزون', 'error');
+                return;
+            }
+            
+            const formData = {
+                productId: productSelect.value,
+                productName: selectedProduct.name,
+                quantity: document.getElementById('saleQuantity').value,
+                price: document.getElementById('salePrice').value,
+                costPrice: selectedProduct.costPrice,
+                soldBy: currentUser.username,
+                customerName: document.getElementById('saleCustomerName').value
+            };
+            
+            try {
+                const result = await callAPI('addSale', formData);
+                
+                if (result.success) {
+                    showMessage('تم تسجيل البيع بنجاح', 'success');
+                    hideModal('addSaleModal');
+                    document.getElementById('addSaleForm').reset();
+                    await loadAdminData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في تسجيل البيع', 'error');
+            }
+        }
+
+        async function addUserSale(e) {
+            e.preventDefault();
+            
+            const productSelect = document.getElementById('userSaleProduct');
+            const selectedProduct = products.find(p => p.id == productSelect.value);
+            
+            if (!selectedProduct) {
+                showMessage('الرجاء اختيار منتج', 'error');
+                return;
+            }
+            
+            if (selectedProduct.currentStock < document.getElementById('userSaleQuantity').value) {
+                showMessage('الكمية المطلوبة غير متوفرة في المخزون', 'error');
+                return;
+            }
+            
+            const formData = {
+                productId: productSelect.value,
+                productName: selectedProduct.name,
+                quantity: document.getElementById('userSaleQuantity').value,
+                price: document.getElementById('userSalePrice').value,
+                costPrice: selectedProduct.costPrice,
+                soldBy: currentUser.username,
+                customerName: document.getElementById('userCustomerName').value
+            };
+            
+            try {
+                const result = await callAPI('addSale', formData);
+                
+                if (result.success) {
+                    showMessage('تم تسجيل البيع بنجاح', 'success');
+                    document.getElementById('userSaleForm').reset();
+                    await loadUserData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في تسجيل البيع', 'error');
+            }
+        }
+
+        async function addExpense(e) {
+            e.preventDefault();
+            
+            const formData = {
+                category: document.getElementById('expenseCategory').value,
+                amount: document.getElementById('expenseAmount').value,
+                date: document.getElementById('expenseDate').value,
+                description: document.getElementById('expenseDescription').value,
+                addedBy: currentUser.username
+            };
+            
+            try {
+                const result = await callAPI('addExpense', formData);
+                
+                if (result.success) {
+                    showMessage('تم إضافة المصروف بنجاح', 'success');
+                    hideModal('addExpenseModal');
+                    document.getElementById('addExpenseForm').reset();
+                    setTodayDate();
+                    await loadAdminData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في إضافة المصروف', 'error');
+            }
+        }
+
+        async function addUser(e) {
+            e.preventDefault();
+            
+            const formData = {
+                username: document.getElementById('newUsername').value,
+                password: document.getElementById('newUserPassword').value,
+                type: document.getElementById('newUserType').value,
+                permissions: document.getElementById('newUserPermissions').value
+            };
+            
+            try {
+                const result = await callAPI('addUser', formData);
+                
+                if (result.success) {
+                    showMessage('تم إضافة المستخدم بنجاح', 'success');
+                    hideModal('addUserModal');
+                    document.getElementById('addUserForm').reset();
+                    await loadAdminData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في إضافة المستخدم', 'error');
+            }
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+            
+            try {
+                const result = await callAPI('deleteProduct', { id: productId });
+                
+                if (result.success) {
+                    showMessage('تم حذف المنتج بنجاح', 'success');
+                    await loadAdminData();
+                } else {
+                    showMessage(result.error, 'error');
+                }
+            } catch (error) {
+                showMessage('خطأ في حذف المنتج', 'error');
+            }
+        }
+
+        function editProduct(productId) {
+            const product = products.find(p => p.id == productId);
+            if (!product) return;
+            
+            // ملء النموذج ببيانات المنتج
+            document.getElementById('newProductName').value = product.name;
+            document.getElementById('newProductCategory').value = product.category;
+            document.getElementById('newProductWeight').value = product.weight || '';
+            document.getElementById('newProductPieces').value = product.pieces || '';
+            document.getElementById('newProductCost').value = product.costPrice;
+            document.getElementById('newProductPrice').value = product.marketValue;
+            document.getElementById('newProductStock').value = product.currentStock;
+            document.getElementById('newProductMinStock').value = product.minStock;
+            
+            showModal('addProductModal');
+            // يمكنك إضافة منطق للتحديث بدلاً من الإضافة
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchProducts').value.toLowerCase();
+            const rows = document.querySelectorAll('#productsList table tbody tr');
+            
+            rows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function filterUserProducts() {
+            const searchTerm = document.getElementById('userSearchProducts').value.toLowerCase();
+            const rows = document.querySelectorAll('#userProductsList table tbody tr');
+            
+            rows.forEach(row => {
+                const productName = row.cells[0].textContent.toLowerCase();
+                if (productName.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function showSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // إظهار القسم المطلوب
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // تحديث التنقل النشط
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+        }
+
+        function showUserSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // إظهار القسم المطلوب
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // تحديث التنقل النشط
+            document.querySelectorAll('.user-nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            
+            const themeButtons = document.querySelectorAll('.theme-toggle');
+            themeButtons.forEach(btn => {
+                btn.textContent = isDarkMode ? '☀️' : '🌙';
+            });
+            
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        function showMessage(message, type) {
+            const alertClass = type === 'success' ? 'alert-success' : 
+                             type === 'warning' ? 'alert-warning' : 'alert-danger';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `alert ${alertClass}`;
+            messageDiv.textContent = message;
+            
+            // إضافة الرسالة في أعلى الصفحة
+            const main = document.querySelector('main');
+            main.insertBefore(messageDiv, main.firstChild);
+            
+            // إزالة الرسالة بعد 5 ثوان
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        async function callAPI(action, params = {}) {
+            const url = new URL(API_URL);
+            url.searchParams.append('action', action);
+            
+            for (const key in params) {
+                if (params[key] !== null && params[key] !== undefined) {
+                    url.searchParams.append(key, params[key]);
+                }
+            }
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw new Error('فشل الاتصال بالخادم');
+            }
+        }
+
+        // دوال التقارير
+        function generateSalesReport() {
+            const salesData = sales.map(sale => ({
+                المنتج: sale.productName,
+                الكمية: sale.quantity,
+                السعر: sale.price,
+                الربح: sale.profit,
+                التاريخ: new Date(sale.date).toLocaleDateString('ar-SA'),
+                البائع: sale.soldBy
+            }));
+            
+            downloadCSV(salesData, 'تقرير_المبيعات.csv');
+        }
+
+        function generateInventoryReport() {
+            const inventoryData = products.map(product => ({
+                المنتج: product.name,
+                الفئة: product.category,
+                المخزون: product.currentStock,
+                'الحد الأدنى': product.minStock,
+                'سعر التكلفة': product.costPrice,
+                'سعر البيع': product.marketValue
+            }));
+            
+            downloadCSV(inventoryData, 'تقرير_المخزون.csv');
+        }
+
+        function generateLowStockReport() {
+            const lowStockData = products
+                .filter(product => product.currentStock <= product.minStock)
+                .map(product => ({
+                    المنتج: product.name,
+                    الفئة: product.category,
+                    المخزون: product.currentStock,
+                    'الحد الأدنى': product.minStock
+                }));
+            
+            downloadCSV(lowStockData, 'تقرير_المخزون_المنخفض.csv');
+        }
+
+        function downloadCSV(data, filename) {
+            if (data.length === 0) {
+                showMessage('لا توجد بيانات للتصدير', 'warning');
+                return;
+            }
+            
+            const headers = Object.keys(data[0]);
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => headers.map(header => row[header]).join(','))
+            ].join('\n');
+            
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            
+            showMessage('تم تصدير التقرير بنجاح', 'success');
+        }
+
+        // تحميل إعدادات الثيم من التخزين المحلي
+        if (localStorage.getItem('darkMode') === 'true') {
+            toggleTheme();
+        }
+    </script>
+</body>
+</html>
