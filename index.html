@@ -897,64 +897,55 @@ https://script.google.com/macros/s/AKfycbxMaZP558JWpD6xzyzcTMF6qGEblgDlefE9_7uQn
         let expenses = [];
         let users = [];
 
-        // تهيئة التطبيق
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
+// تهيئة التطبيق - شاشة الدخول أولاً
+function initializeApp() {
+    // إخفاء جميع الواجهات أولاً
+    document.getElementById('adminInterface').classList.add('hidden');
+    document.getElementById('userInterface').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    
+    // تعيين تاريخ اليوم
+    setTodayDate();
+    
+    // إضافة مستمعي الأحداث
+    setupEventListeners();
+    
+    // مسح أي بيانات دخول سابقة (للتأكد من ظهور شاشة الدخول)
+    localStorage.removeItem('currentUser');
+}
+
+function setupEventListeners() {
+    // أحداث الدخول
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('userLogoutBtn').addEventListener('click', handleLogout);
+    
+    // أحداث الثيم
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    document.getElementById('userThemeToggle').addEventListener('click', toggleTheme);
+    
+    // أحداث التنقل
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection(e.target.getAttribute('data-section'));
         });
-
-        async function initializeApp() {
-            // تعيين تاريخ اليوم
-            setTodayDate();
-            
-            // إضافة مستمعي الأحداث
-            setupEventListeners();
-            
-            // تحميل البيانات الأولية إذا كان المستخدم مسجل الدخول
-            if (localStorage.getItem('currentUser')) {
-                currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                showMainInterface();
-                await loadInitialData();
-            }
-        }
-
-        function setupEventListeners() {
-            // أحداث الدخول
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            document.getElementById('userLogoutBtn').addEventListener('click', handleLogout);
-            
-            // أحداث الثيم
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-            document.getElementById('userThemeToggle').addEventListener('click', toggleTheme);
-            
-            // أحداث التنقل
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showSection(e.target.getAttribute('data-section'));
-                });
-            });
-            
-            document.querySelectorAll('.user-nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showUserSection(e.target.getAttribute('data-section'));
-                });
-            });
-            
-            // أحداث النماذج
-            document.getElementById('addProductForm').addEventListener('submit', addProduct);
-            document.getElementById('addSaleForm').addEventListener('submit', addSale);
-            document.getElementById('addExpenseForm').addEventListener('submit', addExpense);
-            document.getElementById('addUserForm').addEventListener('submit', addUser);
-            document.getElementById('userSaleForm').addEventListener('submit', addUserSale);
-        }
-
-        function setTodayDate() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('expenseDate').value = today;
-        }
-
+    });
+    
+    document.querySelectorAll('.user-nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showUserSection(e.target.getAttribute('data-section'));
+        });
+    });
+    
+    // أحداث النماذج
+    document.getElementById('addProductForm').addEventListener('submit', addProduct);
+    document.getElementById('addSaleForm').addEventListener('submit', addSale);
+    document.getElementById('addExpenseForm').addEventListener('submit', addExpense);
+    document.getElementById('addUserForm').addEventListener('submit', addUser);
+    document.getElementById('userSaleForm').addEventListener('submit', addUserSale);
+}
         async function handleLogin(e) {
             e.preventDefault();
             
