@@ -467,250 +467,237 @@
     </style>
 </head>
 <body>
-    <!-- شاشة الدخول -->
-    <div id="loginScreen" class="login-container">
-        <div class="login-form">
-            <h2>تسجيل الدخول - نظام Jolly Silver</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">اسم المستخدم:</label>
-                    <input type="text" id="username" class="form-control" required value="admin">
+<!-- شاشة الدخول -->
+<div id="loginScreen" class="login-container">
+    <div class="login-form">
+        <h2>تسجيل الدخول - نظام Jolly Silver</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="userType">نوع المستخدم:</label>
+                <select id="userType" class="form-control" required>
+                    <option value="admin">مسؤول</option>
+                    <option value="user">مستخدم</option>
+                </select>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">تسجيل الدخول</button>
+        </form>
+    </div>
+</div>
+
+<!-- واجهة المسؤول -->
+<div id="adminInterface" class="hidden">
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">نظام Jolly Silver للإدارة</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-section="dashboard">📊 لوحة التحكم</a></li>
+                        <li><a href="#" class="nav-link" data-section="inventory">📦 إدارة المخزون</a></li>
+                        <li><a href="#" class="nav-link" data-section="sales">💰 المبيعات</a></li>
+                        <li><a href="#" class="nav-link" data-section="expenses">💸 المصروفات</a></li>
+                        <li><a href="#" class="nav-link" data-section="reports">📈 التقارير</a></li>
+                        <li><a href="#" class="nav-link" data-section="users">👥 المستخدمين</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <button id="themeToggle" class="theme-toggle">🌙</button>
+                    <span id="userWelcome">مرحباً، المسؤول</span>
+                    <button id="logoutBtn" class="logout-btn">تسجيل الخروج</button>
                 </div>
-                <div class="form-group">
-                    <label for="password">كلمة المرور:</label>
-                    <input type="password" id="password" class="form-control" required value="admin123">
-                </div>
-                <div class="form-group">
-                    <label for="userType">نوع المستخدم:</label>
-                    <select id="userType" class="form-control" required>
-                        <option value="admin">مسؤول</option>
-                        <option value="user">مستخدم</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn" style="width: 100%;">تسجيل الدخول</button>
-            </form>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- واجهة المسؤول -->
-    <div id="adminInterface" class="hidden">
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">نظام Jolly Silver للإدارة</div>
-                    <nav>
-                        <ul>
-                            <li><a href="#" class="nav-link active" data-section="dashboard">لوحة التحكم</a></li>
-                            <li><a href="#" class="nav-link" data-section="inventory">إدارة المخزون</a></li>
-                            <li><a href="#" class="nav-link" data-section="sales">المبيعات</a></li>
-                            <li><a href="#" class="nav-link" data-section="expenses">المصروفات</a></li>
-                            <li><a href="#" class="nav-link" data-section="reports">التقارير</a></li>
-                            <li><a href="#" class="nav-link" data-section="users">المستخدمين</a></li>
-                        </ul>
-                    </nav>
-                    <div class="user-info">
-                        <button id="themeToggle" class="theme-toggle">🌙</button>
-                        <span id="userWelcome">مرحباً، المسؤول</span>
-                        <button id="logoutBtn" class="logout-btn">تسجيل الخروج</button>
-                    </div>
-                </div>
+    <main class="container">
+        <!-- لوحة التحكم -->
+        <section id="dashboard" class="section">
+            <h2>لوحة تحكم المسؤول</h2>
+            <div id="dashboardStats" class="dashboard">
+                <!-- سيتم ملء الإحصائيات هنا -->
             </div>
-        </header>
-
-        <main class="container">
-            <!-- لوحة التحكم -->
-            <section id="dashboard" class="section">
-                <h2>لوحة تحكم المسؤول</h2>
-                <div id="dashboardStats" class="dashboard">
-                    <!-- سيتم ملء الإحصائيات هنا -->
-                </div>
-                
-                <div class="dashboard">
-                    <div class="card">
-                        <h3>تنبيهات المخزون المنخفض</h3>
-                        <div id="lowStockAlerts">
-                            <!-- سيتم ملء التنبيهات هنا -->
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h3>أحدث المبيعات</h3>
-                        <div id="recentSales">
-                            <!-- سيتم ملء المبيعات هنا -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- إدارة المخزون -->
-            <section id="inventory" class="section hidden">
-                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
-                    <h2>إدارة المخزون</h2>
-                    <button class="btn btn-success" onclick="showModal('addProductModal')">إضافة منتج جديد</button>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="searchProducts" class="form-control" placeholder="بحث في المنتجات..." onkeyup="filterProducts()">
-                </div>
-
-                <div id="productsList">
-                    <!-- سيتم ملء المنتجات هنا -->
-                </div>
-            </section>
-
-            <!-- المبيعات -->
-            <section id="sales" class="section hidden">
-                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
-                    <h2>إدارة المبيعات</h2>
-                    <button class="btn btn-success" onclick="showModal('addSaleModal')">تسجيل بيع جديد</button>
-                </div>
-
-                <div id="salesList">
-                    <!-- سيتم ملء المبيعات هنا -->
-                </div>
-            </section>
-
-            <!-- المصروفات -->
-            <section id="expenses" class="section hidden">
-                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
-                    <h2>إدارة المصروفات</h2>
-                    <button class="btn btn-success" onclick="showModal('addExpenseModal')">إضافة مصروف</button>
-                </div>
-
-                <div id="expensesList">
-                    <!-- سيتم ملء المصروفات هنا -->
-                </div>
-            </section>
-
-            <!-- التقارير -->
-            <section id="reports" class="section hidden">
-                <h2>التقارير والإحصائيات</h2>
-                <div class="dashboard">
-                    <div class="card">
-                        <h3>تقارير المبيعات</h3>
-                        <button class="btn" onclick="generateSalesReport()">تقرير المبيعات</button>
-                        <button class="btn" onclick="generateMonthlyReport()">تقرير شهري</button>
-                    </div>
-                    <div class="card">
-                        <h3>تقارير المخزون</h3>
-                        <button class="btn" onclick="generateInventoryReport()">تقرير المخزون</button>
-                        <button class="btn" onclick="generateLowStockReport()">تقرير المخزون المنخفض</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- إدارة المستخدمين -->
-            <section id="users" class="section hidden">
-                <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
-                    <h2>إدارة المستخدمين</h2>
-                    <button class="btn btn-success" onclick="showModal('addUserModal')">إضافة مستخدم</button>
-                </div>
-
-                <div id="usersList">
-                    <!-- سيتم ملء المستخدمين هنا -->
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="container">
-                <p>نظام Jolly Silver للإدارة &copy; 2024</p>
-            </div>
-        </footer>
-    </div>
-
-    <!-- واجهة المستخدم -->
-    <div id="userInterface" class="hidden">
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <div class="logo">نظام Jolly Silver للإدارة</div>
-                    <nav>
-                        <ul>
-                            <li><a href="#" class="user-nav-link active" data-section="userDashboard">لوحة التحكم</a></li>
-                            <li><a href="#" class="user-nav-link" data-section="userSales">المبيعات</a></li>
-                            <li><a href="#" class="user-nav-link" data-section="userInventory">المخزون</a></li>
-                        </ul>
-                    </nav>
-                    <div class="user-info">
-                        <button id="userThemeToggle" class="theme-toggle">🌙</button>
-                        <span id="userWelcomeText">مرحباً، المستخدم</span>
-                        <button id="userLogoutBtn" class="logout-btn">تسجيل الخروج</button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <main class="container">
-            <!-- لوحة تحكم المستخدم -->
-            <section id="userDashboard" class="section">
-                <h2>لوحة تحكم المستخدم</h2>
+            
+            <div class="dashboard">
                 <div class="card">
-                    <h3>الإجراءات السريعة</h3>
-                    <div class="dashboard">
-                        <div class="stat-card">
-                            <h3>تسجيل بيع</h3>
-                            <button class="btn btn-success" onclick="showModal('addSaleModal')">بدء عملية بيع</button>
-                        </div>
-                        <div class="stat-card">
-                            <h3>فحص المخزون</h3>
-                            <button class="btn" onclick="showUserSection('userInventory')">عرض المخزون</button>
-                        </div>
+                    <h3>🚨 تنبيهات المخزون المنخفض</h3>
+                    <div id="lowStockAlerts">
+                        <!-- سيتم ملء التنبيهات هنا -->
                     </div>
                 </div>
-            </section>
-
-            <!-- مبيعات المستخدم -->
-            <section id="userSales" class="section hidden">
-                <h2>تسجيل المبيعات</h2>
                 <div class="card">
-                    <form id="userSaleForm">
-                        <div class="form-group">
-                            <label for="userSaleProduct">المنتج:</label>
-                            <select id="userSaleProduct" class="form-control" required>
-                                <option value="">اختر المنتج</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="userSaleQuantity">الكمية:</label>
-                            <input type="number" id="userSaleQuantity" class="form-control" required min="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="userSalePrice">سعر البيع:</label>
-                            <input type="number" id="userSalePrice" class="form-control" required step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="userCustomerName">اسم العميل (اختياري):</label>
-                            <input type="text" id="userCustomerName" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-success">تسجيل البيع</button>
-                    </form>
+                    <h3>🔄 أحدث المبيعات</h3>
+                    <div id="recentSales">
+                        <!-- سيتم ملء المبيعات هنا -->
+                    </div>
                 </div>
-
-                <h3 style="margin-top: 2rem;">عمليات البيع الخاصة بي</h3>
-                <div id="userSalesList">
-                    <!-- سيتم ملء مبيعات المستخدم هنا -->
-                </div>
-            </section>
-
-            <!-- مخزون المستخدم -->
-            <section id="userInventory" class="section hidden">
-                <h2>المخزون المتاح</h2>
-                <div class="form-group">
-                    <input type="text" id="userSearchProducts" class="form-control" placeholder="بحث في المنتجات..." onkeyup="filterUserProducts()">
-                </div>
-                <div id="userProductsList">
-                    <!-- سيتم ملء منتجات المستخدم هنا -->
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="container">
-                <p>نظام Jolly Silver للإدارة &copy; 2024</p>
             </div>
-        </footer>
-    </div>
+        </section>
 
+        <!-- إدارة المخزون -->
+        <section id="inventory" class="section hidden">
+            <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                <h2>📦 إدارة المخزون</h2>
+                <button class="btn btn-success" onclick="showModal('addProductModal')">➕ إضافة منتج جديد</button>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="searchProducts" class="form-control" placeholder="🔍 بحث في المنتجات..." onkeyup="filterProducts()">
+            </div>
+
+            <div id="productsList">
+                <!-- سيتم ملء المنتجات هنا -->
+            </div>
+        </section>
+
+        <!-- المبيعات -->
+        <section id="sales" class="section hidden">
+            <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                <h2>💰 إدارة المبيعات</h2>
+                <button class="btn btn-success" onclick="showModal('addSaleModal')">🛒 تسجيل بيع جديد</button>
+            </div>
+
+            <div id="salesList">
+                <!-- سيتم ملء المبيعات هنا -->
+            </div>
+        </section>
+
+        <!-- المصروفات -->
+        <section id="expenses" class="section hidden">
+            <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                <h2>💸 إدارة المصروفات</h2>
+                <button class="btn btn-success" onclick="showModal('addExpenseModal')">➕ إضافة مصروف</button>
+            </div>
+
+            <div id="expensesList">
+                <!-- سيتم ملء المصروفات هنا -->
+            </div>
+        </section>
+
+        <!-- التقارير -->
+        <section id="reports" class="section hidden">
+            <h2>📈 التقارير والإحصائيات</h2>
+            <div class="dashboard">
+                <div class="card">
+                    <h3>📊 تقارير المبيعات</h3>
+                    <button class="btn" onclick="generateSalesReport()">تقرير المبيعات</button>
+                    <button class="btn" onclick="generateMonthlyReport()">تقرير شهري</button>
+                </div>
+                <div class="card">
+                    <h3>📦 تقارير المخزون</h3>
+                    <button class="btn" onclick="generateInventoryReport()">تقرير المخزون</button>
+                    <button class="btn" onclick="generateLowStockReport()">تقرير المخزون المنخفض</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- إدارة المستخدمين -->
+        <section id="users" class="section hidden">
+            <div class="header-content" style="padding: 0; margin-bottom: 1rem;">
+                <h2>👥 إدارة المستخدمين</h2>
+                <button class="btn btn-success" onclick="showModal('addUserModal')">➕ إضافة مستخدم</button>
+            </div>
+
+            <div id="usersList">
+                <!-- سيتم ملء المستخدمين هنا -->
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- واجهة المستخدم -->
+<div id="userInterface" class="hidden">
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">نظام Jolly Silver للإدارة</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="user-nav-link active" data-section="userDashboard">📊 لوحة التحكم</a></li>
+                        <li><a href="#" class="user-nav-link" data-section="userSales">🛒 المبيعات</a></li>
+                        <li><a href="#" class="user-nav-link" data-section="userInventory">📦 المخزون</a></li>
+                    </ul>
+                </nav>
+                <div class="user-info">
+                    <button id="userThemeToggle" class="theme-toggle">🌙</button>
+                    <span id="userWelcomeText">مرحباً، المستخدم</span>
+                    <button id="userLogoutBtn" class="logout-btn">تسجيل الخروج</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- لوحة تحكم المستخدم -->
+        <section id="userDashboard" class="section">
+            <h2>لوحة تحكم المستخدم</h2>
+            <div class="card">
+                <h3>⚡ الإجراءات السريعة</h3>
+                <div class="dashboard">
+                    <div class="stat-card">
+                        <h3>🛒 تسجيل بيع</h3>
+                        <button class="btn btn-success" onclick="showUserSection('userSales')">بدء عملية بيع</button>
+                    </div>
+                    <div class="stat-card">
+                        <h3>📦 فحص المخزون</h3>
+                        <button class="btn" onclick="showUserSection('userInventory')">عرض المخزون</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- مبيعات المستخدم -->
+        <section id="userSales" class="section hidden">
+            <h2>🛒 تسجيل المبيعات</h2>
+            <div class="card">
+                <form id="userSaleForm">
+                    <div class="form-group">
+                        <label for="userSaleProduct">المنتج:</label>
+                        <select id="userSaleProduct" class="form-control" required>
+                            <option value="">اختر المنتج</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="userSaleQuantity">الكمية:</label>
+                        <input type="number" id="userSaleQuantity" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="userSalePrice">سعر البيع:</label>
+                        <input type="number" id="userSalePrice" class="form-control" required step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="userCustomerName">اسم العميل (اختياري):</label>
+                        <input type="text" id="userCustomerName" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">✅ تسجيل البيع</button>
+                </form>
+            </div>
+
+            <h3 style="margin-top: 2rem;">📋 عمليات البيع الخاصة بي</h3>
+            <div id="userSalesList">
+                <!-- سيتم ملء مبيعات المستخدم هنا -->
+            </div>
+        </section>
+
+        <!-- مخزون المستخدم -->
+        <section id="userInventory" class="section hidden">
+            <h2>📦 المخزون المتاح</h2>
+            <div class="form-group">
+                <input type="text" id="userSearchProducts" class="form-control" placeholder="🔍 بحث في المنتجات..." onkeyup="filterUserProducts()">
+            </div>
+            <div id="userProductsList">
+                <!-- سيتم ملء منتجات المستخدم هنا -->
+            </div>
+        </section>
+    </main>
+</div>
     <!-- النماذج المنبثقة -->
     <!-- نموذج إضافة منتج -->
     <div id="addProductModal" class="modal hidden">
